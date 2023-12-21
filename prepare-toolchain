@@ -27,7 +27,10 @@ cmake -S src/llvm/ -B build \
 	-DCMAKE_BUILD_TYPE=RELEASE \
 	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}" \
 	-DCMAKE_CXX_FLAGS="-I${PWD}/../src/llvm/projects/clang/include -I${PWD}/projects/clang/include" \
-	-DLLVM_INCLUDE_TESTS=OFF
+	-DLLVM_INCLUDE_TESTS=OFF \
+	-DLLVM_ENABLE_PROJECTS="tapi;clang" \
+	-DCLANG_INCLUDE_TESTS=OFF \
+	-DTAPI_INCLUDE_TESTS=OFF
 cmake --build build --target clangBasic -- -j "${JOBS}"
 cmake --build build --target libtapi dsymutil install-libtapi install-tapi-headers install-tapi install-dsymutil -- -j "${JOBS}"
 
