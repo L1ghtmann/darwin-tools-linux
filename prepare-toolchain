@@ -29,6 +29,7 @@ cmake -S src/llvm/ -B build \
 	-DCMAKE_CXX_FLAGS="-I${PWD}/../src/llvm/projects/clang/include -I${PWD}/projects/clang/include" \
 	-DLLVM_INCLUDE_TESTS=OFF \
 	-DLLVM_ENABLE_PROJECTS="tapi;clang" \
+	-DLLVM_TARGETS_TO_BUILD="X86;ARM;AArch64" \
 	-DCLANG_INCLUDE_TESTS=OFF \
 	-DTAPI_INCLUDE_TESTS=OFF
 cmake --build build --target clangBasic -- -j "${JOBS}"
