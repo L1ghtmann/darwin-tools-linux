@@ -22,43 +22,47 @@ rm -rf "${STAGING}"
 mkdir -p "${INSTALLPREFIX}"
 
 info "Building LLVM tools"
-mkdir -p "${ROOT}/apple-libtapi/build"
-cd "${ROOT}/apple-libtapi/build"
-cmake ../src/llvm \
-	-DCMAKE_CXX_FLAGS="-I${PWD}/../src/llvm/projects/clang/include -I${PWD}/projects/clang/include" \
-	-DLLVM_INCLUDE_TESTS=OFF \
+cd "${ROOT}/apple-libtapi/"
+cmake ../src/llvm -B build \
 	-DCMAKE_BUILD_TYPE=RELEASE \
-	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}"
-make clangBasic -j "${JOBS}"
-make libtapi dsymutil install-libtapi install-tapi-headers install-tapi install-dsymutil -j "${JOBS}"
+	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}" \
+	-DCMAKE_CXX_FLAGS="-I${PWD}/../src/llvm/projects/clang/include -I${PWD}/projects/clang/include" \
+	-DLLVM_INCLUDE_TESTS=OFF
+cmake --build build --target clangBasic -- -j "${JOBS}"
+cmake --build build --target libtapi dsymutil install-libtapi install-tapi-headers install-tapi install-dsymutil -- -j "${JOBS}"
 
 info "Building cctools"
+cd "${ROOT}/apple-libdispatch"
+cmake -B build \
+	-DCMAKE_BUILD_TYPE=RELEASE \
+	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}"
+cmake --build build --target install -- -j "${JOBS}"
+
 cd "${ROOT}/cctools-port/cctools"
 ./configure \
 	--prefix="${INSTALLPREFIX}" \
 	--with-libtapi="${INSTALLPREFIX}" \
+	--with-libdispatch="${INSTALLPREFIX}" \
+	--with-libblocksruntime="${INSTALLPREFIX}" \
 	--target="aarch64-apple-darwin14" \
 	--program-prefix="" \
 	LDFLAGS="-Wl,-rpath,'\$\$ORIGIN/../lib' -Wl,-z,origin"
-make -j "${JOBS}" \
-	PROGRAM_PREFIX="" \
-	CXXABI_LIB="-l:libc++abi.a" \
-	install
+make PROGRAM_PREFIX="" CXXABI_LIB="-l:libc++abi.a" install -j "${JOBS}"
 
 info "Building libplist"
 cd "${ROOT}/libplist"
 PLIST_PREFIX="${STAGING}/libplist-install"
 mkdir -p "${PLIST_PREFIX}"
 LC_ALL=C ./autogen.sh --prefix="${PLIST_PREFIX}" --without-cython PACKAGE_VERSION=latest
-make -j "${JOBS}" install
+make install -j "${JOBS}"
 
-info "Installing ldid"
+info "Building ldid"
 cd "${ROOT}/ldid"
-make -j "${JOBS}" \
-	DESTDIR="${INSTALLPREFIX}" PREFIX="" \
+make DESTDIR="${INSTALLPREFIX}" PREFIX="" \
 	LIBCRYPTO_LIBS="-l:libcrypto.a -lpthread -ldl" \
 	LIBPLIST_LIBS="${PLIST_PREFIX}/lib/libplist-2.0.a" LIBPLIST_INCLUDES="-I${PLIST_PREFIX}/include" \
-	install
+	install \
+	-j "${JOBS}"
 
 info "Packaging toolchain"
 mkdir -p "${PACKAGES}"
