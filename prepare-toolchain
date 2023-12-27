@@ -22,23 +22,25 @@ rm -rf "${STAGING}"
 mkdir -p "${INSTALLPREFIX}"
 
 info "Building LLVM tools"
-cd "${ROOT}/apple-libtapi/"
-cmake -S src/llvm/ -B build \
-	-DCMAKE_BUILD_TYPE=RELEASE \
-	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}" \
-	-DCMAKE_CXX_FLAGS="-I${PWD}/../src/llvm/projects/clang/include -I${PWD}/projects/clang/include" \
-	-DLLVM_INCLUDE_TESTS=OFF \
+cd "${ROOT}/tapi/"
+cmake -B build -G "Ninja" \
 	-DLLVM_ENABLE_PROJECTS="tapi;clang" \
 	-DLLVM_TARGETS_TO_BUILD="X86;ARM;AArch64" \
+	-DLLVM_ENABLE_WARNINGS=OFF \
+	-DLLVM_INCLUDE_TESTS=OFF \
 	-DCLANG_INCLUDE_TESTS=OFF \
-	-DTAPI_INCLUDE_TESTS=OFF
+	-DTAPI_INCLUDE_TESTS=OFF \
+	-DCMAKE_BUILD_TYPE=Release \
+	-DCMAKE_CXX_FLAGS="-I${PWD}/llvm/include/ -I${PWD}/clang/include/" \
+	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}"
+	-S llvm
 cmake --build build --target clangBasic -- -j "${JOBS}"
 cmake --build build --target libtapi dsymutil install-libtapi install-tapi-headers install-tapi install-dsymutil -- -j "${JOBS}"
 
 info "Building cctools"
 cd "${ROOT}/apple-libdispatch"
 cmake -B build \
-	-DCMAKE_BUILD_TYPE=RELEASE \
+	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}"
 cmake --build build --target install -- -j "${JOBS}"
 
