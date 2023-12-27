@@ -32,7 +32,7 @@ cmake -B build -G "Ninja" \
 	-DTAPI_INCLUDE_TESTS=OFF \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_CXX_FLAGS="-I${PWD}/llvm/include/ -I${PWD}/clang/include/" \
-	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}"
+	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}" \
 	-S llvm
 cmake --build build --target clangBasic -- -j "${JOBS}"
 cmake --build build --target libtapi dsymutil install-libtapi install-tapi-headers install-tapi install-dsymutil -- -j "${JOBS}"
