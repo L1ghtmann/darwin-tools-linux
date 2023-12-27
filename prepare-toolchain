@@ -23,7 +23,7 @@ mkdir -p "${INSTALLPREFIX}"
 
 info "Building LLVM tools"
 cd "${ROOT}/tapi/"
-cmake -B build -G "Ninja" \
+cmake -B build -S llvm \
 	-DLLVM_ENABLE_PROJECTS="tapi;clang" \
 	-DLLVM_TARGETS_TO_BUILD="X86;ARM;AArch64" \
 	-DLLVM_ENABLE_WARNINGS=OFF \
@@ -32,8 +32,7 @@ cmake -B build -G "Ninja" \
 	-DTAPI_INCLUDE_TESTS=OFF \
 	-DCMAKE_BUILD_TYPE=Release \
 	-DCMAKE_CXX_FLAGS="-I${PWD}/llvm/include/ -I${PWD}/clang/include/" \
-	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}" \
-	-S llvm
+	-DCMAKE_INSTALL_PREFIX="${INSTALLPREFIX}"
 cmake --build build --target clangBasic -- -j "${JOBS}"
 cmake --build build --target libtapi dsymutil install-libtapi install-tapi-headers install-tapi install-dsymutil -- -j "${JOBS}"
 
