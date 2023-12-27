@@ -1,6 +1,3 @@
-[submodule "apple-libtapi"]
-	path = apple-libtapi
-	url = https://github.com/tpoechtrager/apple-libtapi.git
 [submodule "cctools-port"]
 	path = cctools-port
 	url = https://github.com/tpoechtrager/cctools-port.git
@@ -13,3 +10,7 @@
 [submodule "apple-libdispatch"]
 	path = apple-libdispatch
 	url = https://github.com/tpoechtrager/apple-libdispatch/
+[submodule "tapi"]
+	path = tapi
+	url = https://github.com/l1ghtmann/llvm-project
+	branch = lightmann/main-new
