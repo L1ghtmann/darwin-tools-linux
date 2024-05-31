@@ -38,12 +38,12 @@ jobs:
     - name: Install dependencies
       run: |
         if [ "${{ matrix.name }}" = "arch" ]; then
-          pacman -Syu --noconfirm base-devel cmake clang libc++ git
+          pacman -Syu --noconfirm base-devel cmake clang libc++ git python
         elif [ "${{ matrix.name }}" = "fedora" ]; then
           dnf groupinstall -y "Development Tools" "Development Libraries"
           dnf install -y cmake clang libcxx
         else
-          apt update && apt install -y --no-install-recommends ca-certificates curl bash sudo
+          apt update && apt install -y --no-install-recommends ca-certificates curl bash sudo lsb_release wget add-apt-repository gpg
           update-ca-certificates
           curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash -s -- 14
           apt install -y --no-install-recommends build-essential cmake clang-14 libc++-14-dev libc++abi-14-dev git
