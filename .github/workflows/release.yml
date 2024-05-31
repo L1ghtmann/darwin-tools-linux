@@ -38,10 +38,10 @@ jobs:
     - name: Install dependencies
       run: |
         if [ "${{ matrix.name }}" = "arch" ]; then
-          pacman -Syu --noconfirm base-devel cmake clang libc++ git python
+          pacman -Syu --noconfirm base-devel cmake clang libc++ git python openssl
         elif [ "${{ matrix.name }}" = "fedora" ]; then
           dnf groupinstall -y "Development Tools" "Development Libraries"
-          dnf install -y cmake clang libcxx
+          dnf install -y cmake clang libcxx libcxx-static libcxxabi-static
         else
           apt update
           # https://stackoverflow.com/a/44333806
@@ -50,7 +50,7 @@ jobs:
             DEBIAN_FRONTEND=noninteractive apt install -y tzdata
             dpkg-reconfigure --frontend noninteractive tzdata
           fi
-          apt install -y --no-install-recommends ca-certificates build-essential cmake clang libc++-dev libc++abi-dev git python3
+          apt install -y --no-install-recommends ca-certificates build-essential cmake clang libc++-dev libc++abi-dev git python3 libtool automake autoconf
         fi
 
     - uses: actions/checkout@v4
