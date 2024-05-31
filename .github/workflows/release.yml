@@ -38,12 +38,14 @@ jobs:
     - name: Install dependencies
       run: |
         if [ "${{ matrix.name }}" = "arch" ]; then
-          pacman -Syu --noconfirm clang14 libc++ git
+          pacman -Syu --noconfirm base-devel clang14 libc++ git
         elif [ "${{ matrix.name }}" = "fedora" ]; then
+          dnf groupinstall -y "Development Tools" "Development Libraries"
           dnf install -y clang libcxx git
         else
+          apt install -y --no-install-recommends curl bash sudo
           curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash -s -- 14
-          sudo apt install -y --no-install-recommends clang-14 libc++-14-dev libc++abi-14-dev git
+          apt install -y --no-install-recommends build-essential clang-14 libc++-14-dev libc++abi-14-dev git
         fi
 
     - uses: actions/checkout@v4
