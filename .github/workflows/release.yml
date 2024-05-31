@@ -27,20 +27,34 @@ jobs:
             name: ubuntu22.04
           - runner: ubuntu-20.04
             name: ubuntu20.04
+          - runner: docker://archlinux:latest
+            name: arch
+          - runner: docker://fedora:latest
+            name: fedora
 
     runs-on: ${{ matrix.runner }}
+    container: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@v4
       with:
         submodules: true
 
+    - name: Install dependencies
+      run: |
+        if [[ ${{ matrix.name }} == arch ]]; then
+          pacman -Syu --noconfirm clang14 libc++
+        elif [[ ${{ matrix.name }} == fedora ]]; then
+          dnf install -y clang libcxx
+        else
+          curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash -s -- 14
+          sudo apt install -y --no-install-recommends clang-14 libc++-14-dev libc++abi-14-dev
+        fi
+
     - name: Build Release
       id: build_release
       run: |
-        curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash -s -- 14
-        sudo apt install -y --no-install-recommends clang-14 libc++-14-dev libc++abi-14-dev
-        CC=clang-14 CXX=clang++-14 ./prepare-toolchain
-        mv packages/darwin-tools.tar.gz packages/darwin-tools-${{ matrix.name }}.tar.gz
+        CC=clang CXX=clang++ ./prepare-toolchain --
+        mv packages/darwin-tools.tar.gz /github/workspace/packages/darwin-tools-${{ matrix.name }}.tar.gz
 
     - name: Attach Build To Release
       run: |
