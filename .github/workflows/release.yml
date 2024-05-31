@@ -32,7 +32,7 @@ jobs:
           - runner: docker://fedora:latest
             name: fedora
 
-    runs-on: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
     container: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@v4
