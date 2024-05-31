@@ -50,7 +50,7 @@ jobs:
             DEBIAN_FRONTEND=noninteractive apt install -y tzdata
             dpkg-reconfigure --frontend noninteractive tzdata
           fi
-          apt install -y --no-install-recommends ca-certificates build-essential cmake clang libc++-dev libc++abi-dev git
+          apt install -y --no-install-recommends ca-certificates build-essential cmake clang libc++-dev libc++abi-dev git python
         fi
 
     - uses: actions/checkout@v4
