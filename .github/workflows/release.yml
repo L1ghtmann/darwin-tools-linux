@@ -37,18 +37,19 @@ jobs:
     steps:
     - name: Install dependencies
       run: |
-        if [[ ${{ matrix.name }} == arch ]]; then
+      if [ "${{ matrix.name }}" = "arch" ]; then
           pacman -Syu --noconfirm clang14 libc++ git
-        elif [[ ${{ matrix.name }} == fedora ]]; then
+      elif [ "${{ matrix.name }}" = "fedora" ]; then
           dnf install -y clang libcxx git
-        else
+      else
           curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash -s -- 14
           sudo apt install -y --no-install-recommends clang-14 libc++-14-dev libc++abi-14-dev git
-        fi
+      fi
 
     - uses: actions/checkout@v4
     - name: Submodules
       run: |
+      	git config --global --add safe.directory $PWD
         git submodule update --init --recursive
 
     - name: Build Release
