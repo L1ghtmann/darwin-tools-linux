@@ -38,7 +38,7 @@ jobs:
     - name: Install dependencies
       run: |
         if [ "${{ matrix.name }}" = "arch" ]; then
-          pacman -Syu --noconfirm base-devel cmake clang14 libc++ git
+          pacman -Syu --noconfirm base-devel cmake clang libc++ git
         elif [ "${{ matrix.name }}" = "fedora" ]; then
           dnf groupinstall -y "Development Tools" "Development Libraries"
           dnf install -y cmake clang libcxx
