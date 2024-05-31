@@ -23,10 +23,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runner: ubuntu-22.04
-            name: ubuntu22.04
           - runner: ubuntu-20.04
-            name: ubuntu20.04
+            name: docker://ubuntu:20.04
+          - runner: ubuntu-22.04
+            name: docker://ubuntu:22.04
           - runner: docker://archlinux:latest
             name: arch
           - runner: docker://fedora:latest
