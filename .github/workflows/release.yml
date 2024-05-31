@@ -43,9 +43,7 @@ jobs:
           dnf groupinstall -y "Development Tools" "Development Libraries"
           dnf install -y cmake clang libcxx
         else
-          apt update && apt install -y --no-install-recommends ca-certificates curl bash sudo lsb-release wget software-properties-common gpg
-          curl -fsSL https://apt.llvm.org/llvm.sh | sudo bash -s -- 14
-          apt install -y --no-install-recommends build-essential cmake clang-14 libc++-14-dev libc++abi-14-dev git
+          apt install -y --no-install-recommends build-essential cmake clang libc++-dev libc++abi-dev git
         fi
 
     - uses: actions/checkout@v4
