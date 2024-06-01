@@ -13,27 +13,25 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runner: docker://ubuntu:20.04
+          - runner: ubuntu:20.04
             name: ubuntu20.04
-          - runner: docker://ubuntu:22.04
+          - runner: ubuntu:22.04
             name: ubuntu22.04
-          - runner: docker://archlinux:latest
+          - runner: archlinux:latest
             name: arch
-          - runner: docker://fedora:latest
+          - runner: fedora:latest
             name: fedora
 
     runs-on: ubuntu-latest
-    container: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@v4
       with:
         submodules: true
-    - name: Prepare environment
-      run: |
-        ./prepare-env ${{ matrix.name }}
 
     - name: Build Release
+      uses: ${{ matrix.runner }}
       run: |
+        ./prepare-env ${{ matrix.name }}
         CC=clang CXX=clang++ ./prepare-toolchain
         mv packages/darwin-tools.tar.gz packages/darwin-tools-${{ matrix.name }}.tar.gz
 
@@ -62,8 +60,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: uraimo/run-on-arch-action@latest
-        name: Build Release
+
+      - name: Build Release
+        uses: uraimo/run-on-arch-action@v2.7.2
         with:
           arch: aarch64
           distro: ${{ matrix.distro }}
