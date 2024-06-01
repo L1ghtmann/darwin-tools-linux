@@ -28,7 +28,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Prepare environment
       run: |
-        ${{ matrix.name }} ./prepare-env
+        ./prepare-env ${{ matrix.name }}
 
     - name: Build Release
       run: |
@@ -48,7 +48,7 @@ jobs:
         include:
           - distro: ubuntu20.04
             name: ubuntu20.04
-          - distro: ubuntu-22.04
+          - distro: ubuntu22.04
             name: ubuntu22.04
           - distro: archarm_latest
             name: arch
@@ -68,7 +68,7 @@ jobs:
           env: |
             name: ${{ matrix.name }}
           run: |
-            ${name} ./prepare-env
+            ./prepare-env ${name}
             CC=clang CXX=clang++ ./prepare-toolchain
             mv packages/darwin-tools.tar.gz packages/darwin-tools-${name}-aarch64.tar.gz
 
