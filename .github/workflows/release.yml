@@ -30,10 +30,11 @@ jobs:
 
     - name: Build Release
       uses: ${{ matrix.runner }}
-      args: |
-        ./prepare-env ${{ matrix.name }}
-        CC=clang CXX=clang++ ./prepare-toolchain
-        mv packages/darwin-tools.tar.gz packages/darwin-tools-${{ matrix.name }}.tar.gz
+      with:
+        args: |
+          ./prepare-env ${{ matrix.name }}
+          CC=clang CXX=clang++ ./prepare-toolchain
+          mv packages/darwin-tools.tar.gz packages/darwin-tools-${{ matrix.name }}.tar.gz
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
