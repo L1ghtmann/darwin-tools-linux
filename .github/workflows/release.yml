@@ -72,9 +72,9 @@ jobs:
 
     - name: Checkout openssl (3.3)
       uses: actions/checkout@v4
-        with:
-          repository: openssl/openssl
-          ref: openssl-3.3
+      with:
+        repository: openssl/openssl
+        ref: openssl-3.3
 
     - name: Build libcrypto.a (3.3)
       id: build_libcrypto
