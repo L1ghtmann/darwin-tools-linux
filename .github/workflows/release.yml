@@ -71,7 +71,7 @@ jobs:
         fi
 
     - name: Checkout openssl (3.3)
-        uses: actions/checkout@v4
+      uses: actions/checkout@v4
         with:
           repository: openssl/openssl
           ref: openssl-3.3
