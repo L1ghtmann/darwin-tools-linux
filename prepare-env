@@ -64,9 +64,3 @@ if [ -z "$(find /usr -name libcrypto.a)" ]; then
 else
     echo "libcrypto.a exists. Skipping..."
 fi
-
-# Submodules
-# if [ -n "$CI" ] && [ -d "$PWD/.git" ];  then
-#     git config --global --add safe.directory $PWD
-#     git submodule update --init --recursive
-# fi

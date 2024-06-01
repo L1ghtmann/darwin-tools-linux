@@ -38,10 +38,10 @@ jobs:
 
     - name: QEMU fix
       run: |
-        if echo "${{ matrix.name }}" | grep -q "aarch64"; then
+        if echo "${{ matrix.name }}" | grep "aarch64"; then
           docker run --rm --privileged hypriot/qemu-register
         else
-          Not aarch64; no fix needed...
+          echo "Not aarch64; no fix needed..."
         fi
 
     - name: Build Release
