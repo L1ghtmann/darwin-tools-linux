@@ -26,6 +26,8 @@ jobs:
     container: ${{ matrix.runner }}
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: true
     - name: Prepare environment
       run: |
         ./prepare-env ${{ matrix.name }}
@@ -83,6 +85,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:

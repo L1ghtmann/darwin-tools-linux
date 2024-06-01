@@ -62,7 +62,7 @@ else
 fi
 
 # Submodules
-if [ -n "$CI" ]; then
+if [ -n "$CI" ] && [ -d "$PWD/.git" ];  then
     git config --global --add safe.directory $PWD
     git submodule update --init --recursive
 fi
