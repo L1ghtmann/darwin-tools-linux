@@ -55,10 +55,7 @@ jobs:
                           libcxx-static \
                           libcxxabi-static \
                           openssl-devel \
-                          perl-podlators \
-                          perl-FindBin \
-                          perl-IPC-Cmd \
-                          perl-Pod-Html
+                          perl
         else
           apt update
           # https://stackoverflow.com/a/44333806
