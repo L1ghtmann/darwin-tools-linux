@@ -80,6 +80,12 @@ jobs:
                                                   libssl-dev
         fi
 
+    - name: Checkout openssl (3.3)
+        uses: actions/checkout@v4
+        with:
+          repository: openssl/openssl
+          ref: openssl-3.3
+
     - name: Build libcrypto.a (3.3)
       id: build_libcrypto
       run: |
@@ -88,10 +94,9 @@ jobs:
           sed -i 's/!staticlibs/staticlibs/g' /etc/makepkg.conf &> /dev/null || true
           # fix perl's bin not being in $PATH on Arch
           source /etc/profile &> /dev/null || true
-          git clone --depth=1 https://github.com/openssl/openssl/ -b openssl-3.3
           cd openssl
-          ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl
-          make -j
+          ./config
+          make -j build_generated libcrypto.a
           make -j install
         else
           echo "libcrypto.a exists. Skipping..."
