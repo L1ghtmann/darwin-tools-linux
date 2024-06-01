@@ -37,12 +37,12 @@ jobs:
         submodules: true
 
     - name: QEMU fix
-      - run: |
-          if echo "${{ matrix.name }}" | grep -q "aarch64"; then
-            docker run --rm --privileged hypriot/qemu-register
-          else
-            Not aarch64; no fix needed...
-          fi
+      run: |
+        if echo "${{ matrix.name }}" | grep -q "aarch64"; then
+          docker run --rm --privileged hypriot/qemu-register
+        else
+          Not aarch64; no fix needed...
+        fi
 
     - name: Build Release
       run: |
@@ -62,15 +62,6 @@ jobs:
       with:
         name: DT-${{ matrix.name }}
         path: packages/darwin-tools-${{ matrix.name }}.tar.gz
-
-
-              mv packages/darwin-tools.tar.gz packages/darwin-tools-${name}-aarch64.tar.gz
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: DT-${{ matrix.name }}-aarch64
-          path: packages/darwin-tools-${{ matrix.name }}-aarch64.tar.gz
 
   release:
     needs: [build-amd64, build-aarch64]
