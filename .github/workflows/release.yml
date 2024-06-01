@@ -21,12 +21,28 @@ jobs:
             name: arch
           - runner: fedora:latest
             name: fedora
+          - runner: arm64v8/ubuntu:20.04
+            name: ubuntu20.04-aarch64
+          - runner: arm64v8/ubuntu:22.04
+            name: ubuntu22.04-aarch64
+          - runner: lopsided/archlinux-arm64v8:latest
+            name: arch-aarch64
+          - runner: arm64v8/fedora:latest
+            name: fedora-aarch64
 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       with:
         submodules: true
+
+    - name: QEMU fix
+      - run: |
+          if echo "${{ matrix.name }}" | grep -q "aarch64"; then
+            docker run --rm --privileged hypriot/qemu-register
+          else
+            Not aarch64; no fix needed...
+          fi
 
     - name: Build Release
       run: |
@@ -47,39 +63,8 @@ jobs:
         name: DT-${{ matrix.name }}
         path: packages/darwin-tools-${{ matrix.name }}.tar.gz
 
-  build-aarch64:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - distro: ubuntu20.04
-            name: ubuntu20.04
-          - distro: ubuntu22.04
-            name: ubuntu22.04
-          - distro: archarm_latest
-            name: arch
-          - distro: fedora_latest
-            name: fedora
 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: Build Release
-        uses: uraimo/run-on-arch-action@v2.7.2
-        with:
-          arch: aarch64
-          distro: ${{ matrix.distro }}
-          dockerRunArgs: |
-            -v ${PWD}:/runner -w /runner
-          env: |
-            name: ${{ matrix.name }}
-          run: |
-            ./prepare-env ${name}
-            CC=clang CXX=clang++ ./prepare-toolchain
-            mv packages/darwin-tools.tar.gz packages/darwin-tools-${name}-aarch64.tar.gz
+              mv packages/darwin-tools.tar.gz packages/darwin-tools-${name}-aarch64.tar.gz
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

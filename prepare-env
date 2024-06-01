@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Install dependencies
-if [ "$1" = "arch" ]; then
+if echo "$1" | grep -q "arch"; then
     pacman -Syu --noconfirm base-devel \
                             cmake \
                             clang \
@@ -10,7 +10,7 @@ if [ "$1" = "arch" ]; then
                             python \
                             openssl \
                             perl
-elif [ "$1" = "fedora" ]; then
+elif echo "$1" | grep -q "fedora"; then
     dnf groupinstall -y "C Development Tools and Libraries"
     dnf install -y cmake \
                     clang \
@@ -42,7 +42,7 @@ else
                                                   pkgconf \
                                                   openssl \
                                                   libssl-dev
-        fi
+fi
 
 # Build libcrypto.a (3.3)
 if [ -z "$(find /usr -name libcrypto.a)" ]; then
