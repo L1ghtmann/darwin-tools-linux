@@ -70,13 +70,6 @@ jobs:
                                                   libssl-dev
         fi
 
-    - name: Checkout openssl (3.3)
-      uses: actions/checkout@v4
-      with:
-        repository: openssl/openssl
-        ref: openssl-3.3
-        path: openssl
-
     - name: Build libcrypto.a (3.3)
       run: |
         if [ -z "$(find /usr -name libcrypto.a)" ]; then
@@ -84,6 +77,7 @@ jobs:
           sed -i 's/!staticlibs/staticlibs/g' /etc/makepkg.conf &> /dev/null || true
           # fix perl's bin not being in $PATH on Arch
           source /etc/profile &> /dev/null || true
+          git clone --depth=1 https://github.com/openssl/openssl -b openssl-3.3
           cd openssl
           ./config
           make -j build_generated libcrypto.a
