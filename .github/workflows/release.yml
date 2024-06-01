@@ -81,7 +81,8 @@ jobs:
           cd openssl
           ./config
           make -j build_libs
-          make -j install
+          mkdir -p /usr/local/lib
+          cp libcrypto.a /usr/local/lib
         else
           echo "libcrypto.a exists. Skipping..."
         fi
