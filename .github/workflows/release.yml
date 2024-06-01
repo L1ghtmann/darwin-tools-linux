@@ -50,11 +50,15 @@ jobs:
           dnf groupinstall -y "C Development Tools and Libraries"
           dnf install -y cmake \
                           clang \
+                          git \
                           libcxx \
                           libcxx-static \
                           libcxxabi-static \
                           openssl-devel \
-                          perl
+                          perl-podlators \
+                          perl-FindBin \
+                          perl-IPC-Cmd \
+                          perl-Pod-Html
         else
           apt update
           # https://stackoverflow.com/a/44333806
