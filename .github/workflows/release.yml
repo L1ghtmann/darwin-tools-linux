@@ -29,12 +29,17 @@ jobs:
         submodules: true
 
     - name: Build Release
-      uses: ${{ matrix.runner }}
-      with:
-        args: |
-          ./prepare-env ${{ matrix.name }}
-          CC=clang CXX=clang++ ./prepare-toolchain
-          mv packages/darwin-tools.tar.gz packages/darwin-tools-${{ matrix.name }}.tar.gz
+      run: |
+        docker run \
+          --rm \
+          -v $PWD:/workspace \
+          -w /workspace \
+          ${{ matrix.runner }} \
+          sh -c '
+            ./prepare-env ${{ matrix.name }}
+            CC=clang CXX=clang++ ./prepare-toolchain
+            mv packages/darwin-tools.tar.gz packages/darwin-tools-${{ matrix.name }}.tar.gz
+          '
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
