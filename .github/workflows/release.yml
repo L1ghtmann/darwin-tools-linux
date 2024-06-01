@@ -8,17 +8,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  create_release:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Create Release
-      run: |
-        TAG="${GITHUB_REF##*/}-${GITHUB_SHA:0:7}"
-        gh release create "$TAG" --draft --title "Draft Release"
-
   build:
-    needs: create_release
     strategy:
       fail-fast: false
       matrix:
@@ -113,9 +103,30 @@ jobs:
       run: |
         CC=clang CXX=clang++ ./prepare-toolchain
         mv packages/darwin-tools.tar.gz packages/darwin-tools-${{ matrix.name }}.tar.gz
-        mv packages/ /github/workspace/
 
-    - name: Attach Build To Release
-      run: |
-        TAG="${GITHUB_REF##*/}-${GITHUB_SHA:0:7}"
-        gh release upload "$TAG" packages/*.tar.gz
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: DT
+        path: packages/darwin-tools-${{ matrix.name }}.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: DT
+          path: packages
+
+      - name: Create release
+        run: |
+          TAG="${GITHUB_REF##*/}-${GITHUB_SHA:0:7}"
+          gh release create "$TAG" --draft --title "Draft Release"
+
+      - name: Attach builds to release
+        run: |
+          TAG="${GITHUB_REF##*/}-${GITHUB_SHA:0:7}"
+          gh release upload "$TAG" packages/*.tar.gz
