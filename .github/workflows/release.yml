@@ -75,9 +75,9 @@ jobs:
       with:
         repository: openssl/openssl
         ref: openssl-3.3
+        path: openssl
 
     - name: Build libcrypto.a (3.3)
-      id: build_libcrypto
       run: |
         if [ -z "$(find /usr -name libcrypto.a)" ]; then
           # allow static libs on Arch
@@ -99,7 +99,6 @@ jobs:
         git submodule update --init --recursive
 
     - name: Build Release
-      id: build_release
       run: |
         CC=clang CXX=clang++ ./prepare-toolchain
         mv packages/darwin-tools.tar.gz packages/darwin-tools-${{ matrix.name }}.tar.gz
