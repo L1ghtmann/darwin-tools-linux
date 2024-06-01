@@ -13,13 +13,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runner: docker://ubuntu:20.04
+          - runner: ubuntu:20.04
             name: ubuntu20.04
-          - runner: docker://ubuntu:22.04
+          - runner: ubuntu:22.04
             name: ubuntu22.04
-          - runner: docker://archlinux:latest
+          - runner: archlinux:latest
             name: arch
-          - runner: docker://fedora:latest
+          - runner: fedora:latest
             name: fedora
 
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
             name: ubuntu22.04
           - distro: archarm_latest
             name: arch
-          - distro: fedora
+          - distro: fedora_latest
             name: fedora
 
     runs-on: ubuntu-latest
