@@ -45,24 +45,15 @@ jobs:
                                   git \
                                   python \
                                   openssl \
-                                  libtool \
-                                  automake \
-                                  autoconf \
-                                  openssl \
-                                  pkgconf \
                                   perl
         elif [ "${{ matrix.name }}" = "fedora" ]; then
-          dnf groupinstall -y "Development Tools" "Development Libraries"
+          dnf groupinstall -y "C Development Tools and Libraries"
           dnf install -y cmake \
                           clang \
                           libcxx \
                           libcxx-static \
                           libcxxabi-static \
-                          libtool \
-                          automake \
-                          autoconf \
                           openssl-devel \
-                          pkgconf \
                           perl-podlators \
                           perl-FindBin \
                           perl-IPC-Cmd \
@@ -86,9 +77,9 @@ jobs:
                                                   libtool \
                                                   automake \
                                                   autoconf \
+                                                  pkgconf \
                                                   openssl \
-                                                  libssl-dev \
-                                                  pkgconf
+                                                  libssl-dev
         fi
 
     - name: Build libcrypto.a (3.3)
