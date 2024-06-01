@@ -30,7 +30,7 @@ jobs:
 
     - name: Build Release
       uses: ${{ matrix.runner }}
-      run: |
+      args: |
         ./prepare-env ${{ matrix.name }}
         CC=clang CXX=clang++ ./prepare-toolchain
         mv packages/darwin-tools.tar.gz packages/darwin-tools-${{ matrix.name }}.tar.gz
