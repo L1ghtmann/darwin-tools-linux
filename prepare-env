@@ -1,48 +1,52 @@
 #!/usr/bin/env bash
 
 # Install dependencies
-if echo "$1" | grep -q "arch"; then
-    pacman -Syu --noconfirm base-devel \
-                            cmake \
-                            clang \
-                            libc++ \
-                            git \
-                            python \
-                            openssl \
-                            perl
-elif echo "$1" | grep -q "fedora"; then
-    dnf groupinstall -y "C Development Tools and Libraries"
-    dnf install -y cmake \
-                    clang \
-                    git \
-                    libcxx \
-                    libcxx-static \
-                    libcxxabi-static \
-                    openssl-devel \
-                    perl
-else
-    apt update
-    # https://stackoverflow.com/a/44333806
-    if ! dpkg -l tzdata > /dev/null; then
-    ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
-    DEBIAN_FRONTEND=noninteractive apt install -y tzdata
-    dpkg-reconfigure --frontend noninteractive tzdata
-    fi
-    apt install -y --no-install-recommends ca-certificates \
-                                                  build-essential \
-                                                  cmake \
-                                                  clang \
-                                                  libc++-dev \
-                                                  libc++abi-dev \
-                                                  git \
-                                                  python3 \
-                                                  libtool \
-                                                  automake \
-                                                  autoconf \
-                                                  pkgconf \
-                                                  openssl \
-                                                  libssl-dev
-fi
+case "$1" in
+    arch*)
+        pacman -Syu --noconfirm base-devel \
+                                cmake \
+                                clang \
+                                libc++ \
+                                git \
+                                python \
+                                openssl \
+                                perl
+        ;;
+    fedora*)
+        dnf groupinstall -y "C Development Tools and Libraries"
+        dnf install -y cmake \
+                        clang \
+                        git \
+                        libcxx \
+                        libcxx-static \
+                        libcxxabi-static \
+                        openssl-devel \
+                        perl
+        ;;
+    *)
+        apt update
+        # https://stackoverflow.com/a/44333806
+        if ! dpkg -l tzdata > /dev/null; then
+        ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
+        DEBIAN_FRONTEND=noninteractive apt install -y tzdata
+        dpkg-reconfigure --frontend noninteractive tzdata
+        fi
+        apt install -y --no-install-recommends ca-certificates \
+                                                    build-essential \
+                                                    cmake \
+                                                    clang \
+                                                    libc++-dev \
+                                                    libc++abi-dev \
+                                                    git \
+                                                    python3 \
+                                                    libtool \
+                                                    automake \
+                                                    autoconf \
+                                                    pkgconf \
+                                                    openssl \
+                                                    libssl-dev
+    ;;
+esac
 
 # Build libcrypto.a (3.3)
 if [ -z "$(find /usr -name libcrypto.a)" ]; then

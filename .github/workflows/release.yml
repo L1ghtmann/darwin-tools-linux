@@ -48,6 +48,7 @@ jobs:
       run: |
         docker run \
           --rm \
+          -v /qemu-aarch64:/usr/bin/qemu-aarch64 \
           -v $PWD:/workspace \
           -w /workspace \
           ${{ matrix.runner }} \
