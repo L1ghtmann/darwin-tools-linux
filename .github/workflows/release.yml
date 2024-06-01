@@ -35,11 +35,11 @@ jobs:
           -v $PWD:/workspace \
           -w /workspace \
           ${{ matrix.runner }} \
-          sh -c '
+          sh -c "
             ./prepare-env ${{ matrix.name }}
             CC=clang CXX=clang++ ./prepare-toolchain
             mv packages/darwin-tools.tar.gz packages/darwin-tools-${{ matrix.name }}.tar.gz
-          '
+          "
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
@@ -58,7 +58,7 @@ jobs:
             name: ubuntu22.04
           - distro: archarm_latest
             name: arch
-          - distro: fedora_latest
+          - distro: fedora
             name: fedora
 
     runs-on: ubuntu-latest
