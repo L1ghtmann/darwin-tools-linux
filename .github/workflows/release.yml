@@ -80,7 +80,7 @@ jobs:
           git clone --depth=1 https://github.com/openssl/openssl -b openssl-3.3
           cd openssl
           ./config
-          make -j build_generated libcrypto.a
+          make -j build_libs
           make -j install
         else
           echo "libcrypto.a exists. Skipping..."
