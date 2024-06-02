@@ -3,7 +3,7 @@
 # Install dependencies
 case "$1" in
 	arch*)
-		pacman -S --needed --noconfirm base-devel \
+		pacman -Sy --needed --noconfirm base-devel \
 										cmake \
 										clang \
 										libc++ \

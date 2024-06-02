@@ -46,7 +46,7 @@ jobs:
 
     - name: Build Release
       run: |
-        docker run \
+        docker run --platform=linux/arm64 \
           --rm \
           -v /qemu-aarch64:/usr/bin/qemu-aarch64 \
           -v $PWD:/workspace \
