@@ -19,7 +19,7 @@ jobs:
             name: ubuntu22.04
           - runner: archlinux:base-devel
             name: arch
-          - runner: fedora:latest
+          - runner: fedora:38
             name: fedora
           - runner: arm64v8/ubuntu:20.04
             name: ubuntu20.04-aarch64
